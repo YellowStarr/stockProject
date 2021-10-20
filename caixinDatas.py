@@ -37,11 +37,11 @@ class caiXinDatas:
                   "operIncome", "operIncomeYoyGrowthRate", "priceBookRatio", "priceEarningRatio", "salesMargin",
                   "undistributedProfitPerShare", "weightedRoe"]
 
-    def get_finacekpi(self):
+    def get_finacekpi(self, code):
 
         uri = "/api/stock/cgi/stockFinanceKpiReport"
         param = {
-            "code": "101000457",
+            "code": code,
             "types": "0,1,2,3,4"
         }
         r = requests.get(self.url+uri, params=param, headers=self.head_str, verify=False)
@@ -52,10 +52,9 @@ class caiXinDatas:
 
     def turnToPandas(self, responseData):
         ''''''
-        # data = self.get_finacekpi()
-
         df_origin = {}
         for y in range(len(responseData)):
+            # 组装dict
             df_origin[responseData[y]["financeTime"]] = responseData[y]
         df = DataFrame(df_origin, index=self._index)
         return df
@@ -73,9 +72,9 @@ class caiXinDatas:
         return df
 
 if __name__ == "__main__":
-    _filepath = "f:\\Python\\stockProject\\finance\\xinlitai.xlsx"
+    _filepath = "f:\\Python\\stockProject\\finance\\shede.xlsx"
     s = caiXinDatas()
-    data = s.get_finacekpi()
+    data = s.get_finacekpi("101000835")
     df = s.turnToPandas(data)
-    s.turnToPandas(df, _filepath)
+    s.writeToExcel(df, _filepath)
 
