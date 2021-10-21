@@ -7,8 +7,9 @@
 '''
 import requests
 from pandas import DataFrame
+import pandas as pd
 import os
-from utils import operExcel
+from utils import operExcel, NameSwitch
 
 class caiXinDatas:
     def __init__(self):
@@ -50,31 +51,36 @@ class caiXinDatas:
         return kpis
         # df = self.turnToPandas(kpis, _index)
 
-    def turnToPandas(self, responseData):
+    def turnToPandas(self, responseData, CN_df):
         ''''''
         df_origin = {}
         for y in range(len(responseData)):
             # 组装dict
             df_origin[responseData[y]["financeTime"]] = responseData[y]
         df = DataFrame(df_origin, index=self._index)
-        return df
-        # df.fillna(0)
+        m_df = CN_df.join(df, how='right')
+        return m_df
 
 
     def writeToExcel(self, df, filepath):
         isExist = os.path.exists(filepath)
         if isExist:
-            # data = pd.read_excel(filepath)
             df.to_excel(filepath)
         else:
             operExcel.create_excel(filepath)
             df.to_excel(filepath)
         return df
 
+    def get_CN(self, dict):
+        new_Dict = {'CN': dict}
+        df = DataFrame(new_Dict)
+        return df
+
 if __name__ == "__main__":
     _filepath = "f:\\Python\\stockProject\\finance\\shede.xlsx"
     s = caiXinDatas()
     data = s.get_finacekpi("101000835")
-    df = s.turnToPandas(data)
+    CN_df = s.get_CN(NameSwitch.FINACEKPI)
+    df = s.turnToPandas(data,CN_df)
     s.writeToExcel(df, _filepath)
 
