@@ -31,12 +31,8 @@ class caiXinDatas:
             "Cookie": "UM_distinctid=17c600894f6905-0e41aa70507805-a7d173c-1fa400-17c600894f7b18; CNZZDATA1279958504=1428887084-1633696438-https%253A%252F%252Fwww.caixin.com%252F%7C1633696438"
         }
         self.url = "https://s.ccxe.com.cn"
-        self._index = ["assetLiabilityRatio", "basicEarningsPerShare", "capitalReservePerShare",
-                  "dilutedEarningsPerShare", "evEbit",
-                  "evEbitda", "grossProfitMargin", "netAssetsPerShare", "netProfit", "netProfitRate",
-                  "netProfitYoyGrowthRate", "operCashflowPerShare",
-                  "operIncome", "operIncomeYoyGrowthRate", "priceBookRatio", "priceEarningRatio", "salesMargin",
-                  "undistributedProfitPerShare", "weightedRoe"]
+        self._index = []
+        self.CN_df = ''
 
     def get_finacekpi(self, code):
 
@@ -48,17 +44,59 @@ class caiXinDatas:
         r = requests.get(self.url+uri, params=param, headers=self.head_str, verify=False)
         res = r.json()
         kpis = res['data']
+        self.get_index(NameSwitch.FINACEKPI)
+        self.CN_df = self.get_CN(NameSwitch.FINACEKPI)
         return kpis
         # df = self.turnToPandas(kpis, _index)
 
-    def turnToPandas(self, responseData, CN_df):
+    def get_profit(self, code):
+        uri = "/api/stock/cgi/stockFinanceProfReport"
+        param = {
+            "code": code,
+            "types": "0,1,2,3,4"
+        }
+        r = requests.get(self.url + uri, params=param, headers=self.head_str, verify=False)
+        res = r.json()
+        kpis = res['data']
+        self.get_index(NameSwitch.PROFITREPORT)
+        self.CN_df = self.get_CN(NameSwitch.PROFITREPORT)
+        return kpis
+
+    def get_Debt(self, code):
+        uri = "/api/stock/cgi/stockFinanceDebtReport"
+        param = {
+            "code": code,
+            "types": "0,1,2,3,4"
+        }
+        r = requests.get(self.url + uri, params=param, headers=self.head_str, verify=False)
+        res = r.json()
+        kpis = res['data']
+        self.get_index(NameSwitch.FINACEDEBT)
+        self.CN_df = self.get_CN(NameSwitch.FINACEDEBT)
+        return kpis
+
+    def get_CashFlow(self, code):
+        uri = "/api/stock/cgi/stockFinanceCashflowReport"
+        param = {
+            "code": code,
+            "types": "0,1,2,3,4"
+        }
+        r = requests.get(self.url + uri, params=param, headers=self.head_str, verify=False)
+        res = r.json()
+        kpis = res['data']
+        self.get_index(NameSwitch.CASHFLOW)
+        self.CN_df = self.get_CN(NameSwitch.CASHFLOW)
+        return kpis
+
+    def turnToPandas(self, responseData):
         ''''''
         df_origin = {}
+
         for y in range(len(responseData)):
             # 组装dict
             df_origin[responseData[y]["financeTime"]] = responseData[y]
         df = DataFrame(df_origin, index=self._index)
-        m_df = CN_df.join(df, how='right')
+        m_df = self.CN_df.join(df, how='right')
         return m_df
 
 
@@ -76,11 +114,16 @@ class caiXinDatas:
         df = DataFrame(new_Dict)
         return df
 
+    def get_index(self, dict):
+        self._index = dict.keys()
+
 if __name__ == "__main__":
-    _filepath = "f:\\Python\\stockProject\\finance\\shede.xlsx"
+    _filepath = "f:\\Python\\stockProject\\finance\\shede_cashflow.xlsx"
     s = caiXinDatas()
     data = s.get_finacekpi("101000835")
-    CN_df = s.get_CN(NameSwitch.FINACEKPI)
-    df = s.turnToPandas(data,CN_df)
+    # data = s.get_profit("101000835")
+    # data = s.get_Debt("101000835")
+    # data = s.get_CashFlow("101000835")
+    df = s.turnToPandas(data)
     s.writeToExcel(df, _filepath)
 

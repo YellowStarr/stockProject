@@ -90,7 +90,7 @@
 		"netProfitRate": 16.8395,                       # 净利润率
 		"nonBusinessExpenditure": 6405170.77,           # 减：营业外支出
 		"nonBusinessIncome": 498322.25,                 # 加：营业外收入
-		"operCosts": 370805527.37,                      # 营业成本
+		"operCosts": 370805527.37,                      # 营业成本FIN
 		"operIncome": 1376323994.58,                    # 营业收入
 		"operProfit": 288872386.52,                     # 营业利润
 		"parentComOwnerNetProfit": 236931428.67,        # 归属于母公司所有者的净利润
