@@ -14,6 +14,9 @@ import os
 from utils import operExcel, NameSwitch
 
 class caiXinDatas:
+    year = ['2012-12-31', '2013-12-31', '2014-12-31', '2015-12-31', '2016-12-31', '2017-12-31', '2018-12-31',
+            '2019-12-31', '2020-12-31', '2021-12-31']
+
     def __init__(self):
         ''''''
         self.head_str = {
@@ -128,9 +131,18 @@ class caiXinDatas:
     def get_index(self, dict):
         self._index = dict.keys()
 
+    def draw_grossProfit(self, code):
+        """毛利率"""
+        kpi_data = self.get_finacekpi(code)
+        kpi_df = self.turnToPandas(kpi_data)
+        kpi_year = kpi_df[self.year]
+        grossProfit = kpi_year.ix["grossProfitMargin"][1:]
+        grossProfit.plot()
+        plt.show()
+
 
 if __name__ == "__main__":
-    _filepath = "f:\\Python\\stockProject\\finance\\xinlitai_finacedebt.xlsx"
+    '''_filepath = "f:\\Python\\stockProject\\finance\\xinlitai_finacedebt.xlsx"
     s = caiXinDatas()
     # data = s.get_finacekpi("101000457")
     # print(data["netProfit"])
@@ -139,15 +151,17 @@ if __name__ == "__main__":
     # data3 = s.get_CashFlow("101000457")
     kpi_df = s.turnToPandas(data2)
     # cashflow_df = s.turnToPandas(data3)
+
+
     # netprofi = kpi_df.ix["netProfit"][1:] / 10000
     # netprofit_r = kpi_df.ix["netProfitRate"][1:]
 
-
-
     # print(netprofi)
-    s.writeToExcel(kpi_df, _filepath)
+    # s.writeToExcel(kpi_df, _filepath)
 
     # netprofi.plot()
     # netprofit_r.plot()
     # plt.show()
-
+    '''
+    s = caiXinDatas()
+    s.draw_grossProfit("101000457")

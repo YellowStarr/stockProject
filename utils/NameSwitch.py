@@ -14,7 +14,7 @@ FINACEKPI = {
     # "endDate": "日期",
     "evEbit": "EV/EBIT企业价值倍数",
     "evEbitda": "EV/EBITDA",
-    # "financeTime": "报告日期",
+    "financeTime": "报告日期",
     "grossProfitMargin": "销售毛利率",
     "netAssetsPerShare": "每股净资产",
     "netProfit": "净利润",
