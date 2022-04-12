@@ -5,7 +5,7 @@
 @Date     : 2021/10/20
 @Desc     : 映射财务字端中英文
 '''
-
+# 关键指标
 FINACEKPI = {
     "assetLiabilityRatio": "资产负债率",
     "basicEarningsPerShare": "每股收益-基本",
@@ -29,7 +29,7 @@ FINACEKPI = {
     "undistributedProfitPerShare": "每股未分配利润",
     "weightedRoe": "净资产收益率-加全"
 }
-
+# 利润表
 PROFITREPORT = {
     "assetsImpairmentLoss": "资产减值损失",
     "basicEarningsPerShare": "每股收益-基本",
@@ -57,7 +57,7 @@ PROFITREPORT = {
     "totalOperIncome": "营业总收入",
     "totalProfit": "营业利润"
 }
-
+# 资产负债表
 FINACEDEBT = {
     "accountsPayable": "应付账款",
     "accountsReceivable": "应收账款",
@@ -103,7 +103,7 @@ FINACEDEBT = {
     "advanceReceipt": "预售款项",
     "estimatedLiabilities": "预计负债"
 }
-
+# 现金流量表
 CASHFLOW = {
     "addNetcash": "增加的现金流量净额",
     "addOperNetcash": "经营活动产生的现金流量净额",
